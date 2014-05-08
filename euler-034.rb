@@ -13,7 +13,7 @@
 #   1.upto(n).inject(:*)
 # end
 
-answer = 40730
+# answer = 40730
 
 def factorials
   n_array = []

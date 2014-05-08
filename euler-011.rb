@@ -1,4 +1,3 @@
-
 # In the 20×20 grid below, four numbers along a diagonal line have been marked in red.
 
 # The product of these numbers is 26 × 63 × 78 × 14 = 1788696.
@@ -34,10 +33,10 @@ HEREDOC
 
 class EulerEleven 
   
-  def initialize input, range
-    @range = range
+  def initialize(input, range)
+    @rangei = range - 1
     @grid = [] 
-    @largest_product = 0
+    @answer = 0
 
     input.split("\n").each do |line|
       row = []
@@ -49,140 +48,73 @@ class EulerEleven
 
     @grid_width = @grid[0].length
     @grid_height = @grid.length
-    
-    horz
-    vert_iteration 
-    lr_diagonal_iteration
-    rl_diagonal_iteration
+
+    iterate
   end
 
-  def horz 
-    x = 0
-    y = 0
-    
-    while x < @grid_height do
-      
-      while y < @grid_width - @range do 
-        group = []
+  def iterate
+    r = 0
+    c = 0
 
-        group = @grid[x][y, @range]
+    while r < @grid_height do
+      while c < @grid_width do
+        direction(r, c)
 
-        product group
-        y += 1
+        c += 1
       end
 
-      x += 1
-      y = 0
+      r += 1
+      c = 0
     end
   end
 
-  def vert_iteration
-    x = 0
-
-    while x < @grid_height - @range do
-      y = 0
-      
-      while y < @grid_width do
-        vert_group x, y
-
-        y += 1
-      end
-
-      x += 1
+  def direction(r, c)
+    if c < @grid_width - @rangei  
+      collect_group(r, c, 0, 1)
     end
-  end
-
-  def vert_group x, y
-    group = []
-
-    while group.length < @range do 
-      group << @grid[x][y]
-
-      x += 1
-    end
-
-    product group 
-  end
-
-  def lr_diagonal_iteration
-    x = 0
-    y = 0
-
-    while x < @grid_width - 3 do
-      y = 0
-      
-      while y < @grid_height - 3 do
-        lr_diagonal_group x, y
-
-        y += 1
-      end
-
-      x += 1
-    end
-  end
-
-  def lr_diagonal_group x, y
-    group = []
-
-    while group.length < @range do 
-
-      group << @grid[x][y]
-
-      x += 1
-      y += 1
-    end
-
-    product group
-  end
-
-  def rl_diagonal_iteration
-    x = 0
-    y = @grid_width - 1
-
-    while x < @grid_height - 3 do
-      
-      while y > 2 do
-        rl_diagonal_group x, y
-        
-        y -= 1
-      end
-
-      x += 1
-      y = @grid_width - 1
-    end
-  end
-
-  def rl_diagonal_group x, y
-    group = []
-
-    while group.length < @range do 
-
-      group << @grid[x][y]
-
-      x += 1
-      y -= 1
-    end
-
-    product group
-  end
   
+    if r < @grid_height -  @rangei 
+      collect_group(r, c, 1, 0)
+    end
+ 
+    if r < @grid_height - @rangei && c < @grid_width - @rangei
+      collect_group(r, c, 1, 1)
+    end
+
+    if r > @rangei && c < @grid_width - @rangei 
+      collect_group(r, c, -1, 1)
+    end
+  end
+
+  def collect_group(r, c, r_iter, c_iter)
+    group = []
+
+    while group.length < @rangei + 1 do 
+        group << @grid[r][c]
+
+        r += r_iter
+        c += c_iter
+    end
+
+    product group
+  end
+
   def product group
     product = 1
 
     group.each do |num|
-      product = product * num
+      product *= num
     end
 
-    if product > @largest_product 
-      @largest_product = product
+    if product > @answer 
+      @answer = product
     end 
   end
 
-  def answer
-    @largest_product
+   def answer
+    @answer
   end
-  
 end
 
-puts "this is answer #{EulerEleven.new(input, 4).answer}"
+puts EulerEleven.new(input, 4).answer
 

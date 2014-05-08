@@ -3,7 +3,7 @@
 # Work out the first ten digits of the sum of the following 
 # one-hundred 50-digit numbers.
 
-5537376230
+# answer 5537376230
 
 input = <<HEREDOC
 37107287533902102798797998220837590246510135740250
