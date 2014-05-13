@@ -16,6 +16,7 @@
 # as the concatenated product of an integer with (1,2, ... , n) where n > 1?
 
 # answer = 932718654
+# time = .12s
 
 def pandigitalmultiples
   largest_pandigital = 0
@@ -43,8 +44,7 @@ def pandigitalmultiples
 end
 
 def check(digits)
-  return false unless digits.uniq!.nil?
-  return true
+  return true if digits.uniq!.nil?
 end
 
 puts pandigitalmultiples
