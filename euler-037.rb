@@ -27,7 +27,7 @@ def primes
     l = p_array.length - 1 
       
     if p > 10 and right_truncate(p_array, l) and left_truncate(p_array, l)
-      # puts "#{p}"
+      puts "#{p}"
       count += 1
       sum += p 
     end
