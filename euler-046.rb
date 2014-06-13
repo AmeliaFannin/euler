@@ -18,38 +18,25 @@
 # as the sum of a prime and twice a square?
 
 # answer: 5777
-# time: .239 s
+# time: .27 s
 
 require 'Prime'
 
 def goldbach
-  odd = Enumerator.new do |y|
-    i = 3
-    
-    loop do
-      y << i
-      i += 2
-    end
-  end
-  
-  while true do 
-    num = odd.next 
-
-    next if num.prime?
-    
-    return num unless check(num)   
+  num = 3
+  while true do
+    return num unless check(num)
+    num += 2
   end
 end
 
 def check(num)
+  return true if num.prime?
+  
   Prime.each(num - 2) do |p|
-    next unless (num - p) % 2 == 0
-      
-    square = (num - p) / 2
-    root = Math.sqrt(square)
-
-    return true if square % root == 0
+    remainder = num - p
+    return true if Math.sqrt(remainder / 2) == Math.sqrt(remainder / 2).to_i
   end
 end
 
-puts goldbach()
+puts goldbach
