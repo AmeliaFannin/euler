@@ -17,6 +17,9 @@
 # What is the smallest odd composite that cannot be written 
 # as the sum of a prime and twice a square?
 
+# answer: 5777
+# time: .239 s
+
 require 'Prime'
 
 def goldbach
@@ -49,4 +52,4 @@ def check(num)
   end
 end
 
-puts goldbach
+puts goldbach()
