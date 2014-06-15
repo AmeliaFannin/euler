@@ -2,47 +2,15 @@
 
 # What is the largest prime factor of the number 600851475143 ?
 
-# 55 => 11
+# answer: 6857
+# time: .082s
 
 require 'prime'
 
-class FastPrime
+def prime_factors
+  largest_factor = Prime.prime_division(600851475143).last
 
-  def initialize num
-    @num = num
-    @max_factor = 0
-    @i = 2
-
-    if @num.prime?
-      puts @num
-    else
-      get_factor
-    end
-  end
-  
-  def get_factor
-    if @num % @i == 0  
-      prime_check
-    else
-      @i = @i + 1
-
-      get_factor
-    end
-  end
-
-  def prime_check
-    @max_factor = @num / @i 
-
-    if @max_factor.prime?
-      puts @max_factor
-    else
-      @i = @i + 1
-
-      get_factor
-    end
-  end
-
+  largest_factor.flatten[0]
 end
 
-
-FastPrime.new(60085147514)
+puts prime_factors
