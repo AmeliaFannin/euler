@@ -5,52 +5,31 @@
 # Find the largest palindrome made from the product of 
 # two 3-digit numbers.
 
+# answer: 906609
+# time: .103s
 
-class Palindrome 
+def palindrome
+  largest_pal = 0
 
-  def initialize x
-    @num = 12
-    @x = x 
-    @original_x = x
-    @y = x
-    @i = 0
-    @pal = 0
-
-    iterate_x
-  end
-  
-  def iterate_x
-    while @x > 9 do  
-      @num = @x * @y
-      @i += 1
-      @x = @x - 1
-
-      if @num.to_s.reverse == @num.to_s
-        @pal = @num
-        @x = 8
-      end
-    end
-
-    puts @pal
-    iterate_y
-  end
-
-  def iterate_y
-    @x = @original_x
-    @y -= 1
-    @num = @x * @y
-    @i += 1
-    
-    if @num.to_s.reverse == @num.to_s
-      if @num > @pal
-        @pal = @num
-        @x = 8 
-        puts "largest palindrome = #{@pal}"
-      else
-        iterate_x
-      end
+  999.downto(100) do |m|
+    1.upto(899) do |n|
+      num = m * (m - n)
+      
+      break if num < largest_pal
+      
+      largest_pal = num if pal_check(num) 
     end
   end
+
+  largest_pal
 end
 
-Palindrome.new 99
+def pal_check(num)
+  num_array = []
+
+  num.to_s.each_char {|i| num_array << i}
+
+  return true if num_array == num_array.reverse
+end
+
+puts palindrome
