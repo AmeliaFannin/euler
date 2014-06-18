@@ -4,70 +4,25 @@
 # What is the smallest positive number that is 
 # evenly divisible by all of the numbers from 1 to 20?
 
-require 'prime'
+#  answer: 232792560
+#  time: 5.318s
 
-class EulerFive
-
-  def initialize min, max
-    min = min
-    max = max
-
-    @range = []
-    @int = 1
-    @index = 0
-    @turns = 0
-    @base_num = 1
-    @full_num = 0
-
-    while max >= min do
-      @range << max 
-      max = max - 1
-    end
-    
-    base_num
-    full_num
+def smallest_mult(num)
+  until test(num) do
+    num += 20
   end
-
-  def base_num
-    @range.each do |prime|
-      if prime.prime?
-      @base_num = @base_num * prime
-      end
-    end
-
-    puts "base_num is #{@base_num}"
-  end 
-
-  def full_num
-    @full_num = @base_num * @int
-    @index = 0
-    @turns += 1
-    
-    check_num
-  end
-
-  def check_num
-    max_index = @range.length - 1
-
-    if @full_num % @range[@index] == 0  
-      @turns += 1
       
-      if @index == max_index 
-        puts "The answer is: #{@full_num}"
-        puts "turns = #{@turns}"
-      else
-        @index += 1
+  num
+end
 
-        check_num
-      end
-
-    else
-      @int += 1
-      
-      full_num
-    end
+def test(num)
+  [19, 17, 13, 11, 14, 18, 16].each do |i|
+    return false unless num % i == 0   
   end
 end
 
-EulerFive.new 1, 20
+
+puts smallest_mult(2520)
+
+
 
