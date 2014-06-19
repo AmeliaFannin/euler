@@ -15,7 +15,7 @@ def palindrome
     1.upto(899) do |n|
       num = m * (m - n)
       
-      break if num < largest_pal
+      break if num <= largest_pal
       
       largest_pal = num if pal_check(num) 
     end

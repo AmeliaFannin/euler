@@ -4,6 +4,7 @@
 #Find the sum of all the multiples of 3 or 5 below 1000.
 
 #answer = 233168
+# time = .087s
 
 def multiples
   sum = 0

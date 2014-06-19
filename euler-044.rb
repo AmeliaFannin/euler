@@ -13,13 +13,13 @@
 # for which their sum and difference are pentagonal 
 #   and D = |Pk − Pj| is minimised; what is the value of D?
 
-# answer: 5482660
-# time: 1.3 s
-# time(with nested enumerators instead of collecting into an array): 22.5 s
+# 7042750 & 1560090 are answer 2 min, 35 sec!
 
 def pentagon
+  answer = 0
   pent_array = []
-
+  
+  # pentagonal number enumerator
   pent = Enumerator.new do |y|
     n = 1
     loop do 
@@ -29,22 +29,46 @@ def pentagon
     end
   end
 
-  while true do
+  until answer > 0 do
     num1 = pent.next
     
     pent_array.each do |num2|
-      diff = num1 - num2
-      sum = num1 + num2
+      puts "#{num1},#{num2}"
+      if pent_array.include?(num1 - num2) && pent_check(num1, num2)
       
-      return diff if pent_check(diff) && pent_check(sum)   
+      answer = num1 - num2
+      puts answer
+
+      end
     end
 
     pent_array << num1
   end
 end
 
-def pent_check(num) 
-  return true if (Math.sqrt(24 * num + 1) + 1)% 6 == 0 
+
+def pent_check(num1, num2) 
+  sum = num1 + num2
+
+  # pentagonal number enumerator
+  check = Enumerator.new do |y|
+    n = 1
+    loop do 
+      p = (n * (3 * n - 1)) / 2
+      y << p
+      n += 1
+    end
+  end
+
+  # looks for num in enum of pentagonal numbers
+  x = 0
+
+  until x >= sum do 
+    x = check.next
+  end
+  
+  return true if sum == x
+ 
 end
 
 puts pentagon
