@@ -22,7 +22,7 @@ func Generate(max int, ch chan<- int) {
 
 // "in" numbers are filtered, only primes sent "out"
 func Filter(in <-chan int, out chan<- int, prime int) {
-	for i := <-in; ; i = <-in {
+	for i := <-in; prime <= i.sqrt; i = <-in {
 		if i%prime != 0 {
 			out <- i
 		}
