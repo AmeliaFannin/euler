@@ -4,51 +4,63 @@
 // the number 600851475143 ?
 
 // # answer: 6857
-// # time: .082s
+// # time: .228s
 
 package main
 
 import "fmt"
 
-// generates numbers until max, send 2, then just odd numbers
-func Generate(max int, ch chan<- int) {
-	ch <- 2
+func primeGenerator(max int) chan int {
+	out := make(chan int, 1)
+	primes := []int{2}
 
-	for i := 3; i <= max; i += 2 {
-		ch <- i
-	}
-	close(ch)
-}
-
-// "in" numbers are filtered, only primes sent "out"
-func Filter(in <-chan int, out chan<- int, prime int) {
-	for i := <-in; prime <= i; i = <-in {
-		if i%prime != 0 {
-			out <- i
-		}
-	}
-	close(out)
-}
-
-func Factors(number int) int {
-	rv := 0
-	ch := make(chan int)
-	go Generate(number, ch)
-
-	for prime := <-ch; number > 1; prime = <-ch {
-		for number%prime == 0 {
-			number = number / prime
-			if prime >= rv {
-				rv = prime
+	go func() {
+		out <- 2
+		for i := 3; i <= max/i; i += 2 {
+			if primeCheck(primes, i) {
+				out <- i
+				primes = append(primes, i)
 			}
 		}
-		ch1 := make(chan int)
-		go Filter(ch, ch1, prime)
-		ch = ch1
+	}()
+	return out
+}
+
+func primeCheck(primes []int, candidate int) bool {
+	for _, known_prime := range primes {
+		if candidate%known_prime == 0 {
+			return false
+		}
 	}
-	return rv
+	return true
+}
+
+func factors(max int, in <-chan int) chan int {
+	out := make(chan int)
+	limit := max
+
+	go func() {
+		for n := range in {
+
+			if n <= limit && max%n == 0 {
+				out <- n
+				limit = limit / n
+			} else if n > limit {
+				close(out)
+			}
+		}
+	}()
+	return out
 }
 
 func main() {
-	fmt.Println(Factors(600851475143))
+	max := 600851475143
+	gen := primeGenerator(max)
+	out := factors(max, gen)
+	pf := 0
+
+	for n := range out {
+		pf = n
+	}
+	fmt.Println(pf)
 }
