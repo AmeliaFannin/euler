@@ -7,6 +7,7 @@
 # in the 20×20 grid?
 
 # 70600674
+# .083s
 
 input = <<HEREDOC
 08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
@@ -31,90 +32,58 @@ input = <<HEREDOC
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48
 HEREDOC
 
-class EulerEleven 
-  
-  def initialize(input, range)
-    @rangei = range - 1
+def parse(input, range)
+    @range = range
     @grid = [] 
     @answer = 0
 
     input.split("\n").each do |line|
       row = []
-      line.split(' ').each do |num|
-        row << Integer(num, 10)
-      end
+      line.split(' ').each {|num| row << num.to_i}
       @grid << row
     end
 
-    @grid_width = @grid[0].length
-    @grid_height = @grid.length
+    width = @grid[0].length
+    height = @grid.length
 
-    iterate
-  end
-
-  def iterate
     r = 0
     c = 0
 
-    while r < @grid_height do
-      while c < @grid_width do
-        direction(r, c)
-
+    until r == height do
+      until c == width do
+        collect(r, c, 0, 1) if c < width - @range - 1  
+                  
+        collect(r, c, 1, 0) if r < height - @range - 1
+         
+        collect(r, c, 1, 1) if r < height - @range - 1 && c < width - @range - 1
+              
+        collect(r, c, -1, 1) if r > @range - 1 && c < width - @range - 1 
+              
         c += 1
       end
 
       r += 1
       c = 0
     end
-  end
 
-  def direction(r, c)
-    if c < @grid_width - @rangei  
-      collect_group(r, c, 0, 1)
-    end
-  
-    if r < @grid_height -  @rangei 
-      collect_group(r, c, 1, 0)
-    end
- 
-    if r < @grid_height - @rangei && c < @grid_width - @rangei
-      collect_group(r, c, 1, 1)
-    end
-
-    if r > @rangei && c < @grid_width - @rangei 
-      collect_group(r, c, -1, 1)
-    end
-  end
-
-  def collect_group(r, c, r_iter, c_iter)
-    group = []
-
-    while group.length < @rangei + 1 do 
-        group << @grid[r][c]
-
-        r += r_iter
-        c += c_iter
-    end
-
-    product group
-  end
-
-  def product group
-    product = 1
-
-    group.each do |num|
-      product *= num
-    end
-
-    if product > @answer 
-      @answer = product
-    end 
-  end
-
-   def answer
     @answer
   end
-end
 
-puts EulerEleven.new(input, 4).answer
+  def collect(r, c, r_iter, c_iter)
+    group = []
+
+    until group.length == @range do 
+      group << @grid[r][c]
+
+      r += r_iter
+      c += c_iter
+    end
+
+    product = group.reduce(1, :*)
+    @answer = product if product > @answer 
+  end
+
+puts parse(input, 4)
+
+
 
