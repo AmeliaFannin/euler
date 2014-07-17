@@ -19,18 +19,33 @@
 # What is the value of the first triangle number to have over five hundred divisors? 
 
 # answer = 76576500
+# time = 1.9s   not fast, but better, old version was 3.08s 
 
-def get_num divisors
+class TrinumberDivisors
+  
+  def initialize 
+    next_term
+  end
+ 
+  def next_term
+    num = 1
+    next_num = 2
 
-  num = 1
-  num_iter = 1
-  i = 1
-  count = 0
-  limit = num
-  answer = 0
+    while divisors(num)
+      num += next_num
+      next_num += 1
+    end
 
-  while answer == 0 do
+    num
+  end
 
+  def divisors(num)
+    limit = num
+    i = 4
+    count = 0
+
+    return true if num % 2 != 0 || num % 3 != 0 
+    
     while i < limit do
       if num % i == 0
         if num / i > i
@@ -40,22 +55,16 @@ def get_num divisors
           count += 1
         end
       end
-          
+              
       i += 1 
     end
 
-    if count < divisors
-      num_iter += 1
-      i = 1
-      num += num_iter
-      limit = num
-      count = 0
-    else
-      answer = num
-    end
+    return false if count > 494
+    true
   end
+  # i starts at 4 and count > 494 because the divisors pairs 1, 2, 3 have already been tested 
+  # most highly abundant numbers are disvisible by 2 and 3, but I tested the long way first
 
-  answer
 end
 
-puts get_num 500
+puts TrinumberDivisors.new.next_term
