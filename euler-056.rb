@@ -8,12 +8,17 @@
 # Considering natural numbers of the form, a to bth power, where a, b < 100, 
 # what is the maximum digital sum?
 
+# answer: 972
+# time: .263s
+
 def googol
   max_digital_sum = 0
   
   2.upto(99) do |a|
     2.upto(99) do |b|
-      sum = digital_sum(a ** b)
+      sum = 0
+      (a ** b).to_s.each_char { |n| sum += n.to_i }
+  
       max_digital_sum = sum if sum > max_digital_sum
     end
   end
@@ -21,9 +26,6 @@ def googol
   max_digital_sum
 end
 
-def digital_sum(num)
-  sum = 0
-  num.to_s.each_char {|n| sum += n.to_i }
-  return sum
-end
+
+
 puts googol
