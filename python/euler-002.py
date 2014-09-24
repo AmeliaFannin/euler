@@ -13,20 +13,18 @@
 # time: .023s
 
 def fib_sum(limit):
-    even_sum = 0
+    total = 0
 
-    first_term = 1
-    second_term = 1
+    first_term, second_term = 1, 1
     
     while second_term <= limit:
-        new_term = first_term + second_term
+        next_term = first_term + second_term
         
-        if new_term % 2 == 0:
-            even_sum += new_term
+        if next_term % 2 == 0:
+            total += next_term
 
-        first_term = second_term
-        second_term = new_term
-    else:
-        return even_sum
+        first_term, second_term = second_term, next_term
+
+    return total
 
 print fib_sum(4000000)
